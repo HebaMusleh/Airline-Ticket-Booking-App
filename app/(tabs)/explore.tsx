@@ -22,9 +22,9 @@ export default function TabTwoScreen() {
       <ThemedView style={styles.titleContainer}>
         <ThemedText type="title">Explore</ThemedText>
       </ThemedView>
-      <ThemedText>This app includes example code to help you get started.</ThemedText>
+      <ThemedText className='text-red-500 text-2xl'>This app includes example code to help you get started.</ThemedText>
       <Collapsible title="File-based routing">
-        <ThemedText>
+        <ThemedText className='text-2xl'>
           This app has two screens:{' '}
           <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> and{' '}
           <ThemedText type="defaultSemiBold">app/(tabs)/explore.tsx</ThemedText>
