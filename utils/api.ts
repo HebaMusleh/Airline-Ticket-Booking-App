@@ -1,7 +1,6 @@
 import axios from "axios";
 export const apiToken =process.env.REACT_APP_API_TOKEN;
-export const apiBaseUrl =
-  "https://test.api.amadeus.com/v2/shopping/flight-offers";
+export const apiBaseUrl =process.env.REACT_APP_API_BASE_URL;
 
 const clientId = process.env.REACT_APP_API_KEY;
 const clientSecret = process.env.REACT_APP_API_SECRET;
