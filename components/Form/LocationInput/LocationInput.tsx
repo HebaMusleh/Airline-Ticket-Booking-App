@@ -16,7 +16,7 @@ const LocationInput: React.FC<InputProps> = ({
           <View className="w-[15%] border-r-2 border-gray-300">{icon}</View>
           <View className="w-[80%] py-3">
             {date ? (
-              <Text className="bg-transparent text-gray-600 font-bold">
+              <Text className="bg-transparent text-gray-600 font-bold ">
                 {value || placeholder}
               </Text>
             ) : value ? (
