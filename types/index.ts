@@ -17,4 +17,14 @@ interface TripOptionProps {
   handleNavigationChange: (type: string) => void;
 }
 
-export { SearchFlightData, InputProps, TripOptionProps };
+interface FlightOfferData {
+  originLocationCode: string;
+    destinationLocationCode: string;
+    departureDate: Date;
+    returnDate: Date;
+    adults: number;
+    children: number;
+    maxResults: number;
+}
+
+export { SearchFlightData, InputProps, TripOptionProps,FlightOfferData };
