@@ -1,12 +1,15 @@
 import axios from "axios";
-export const apiToken = "oyAPDkVAfaMAtEEcEahVwoKrq9i1 ";
+export const apiToken =process.env.REACT_APP_API_TOKEN;
 export const apiBaseUrl =
   "https://test.api.amadeus.com/v2/shopping/flight-offers";
 
-const clientId = "JYhudSr5t3kFAGxYNbg3ZpMaOfRqa3cB";
-const clientSecret = "HNrtUcpKK3X7sHGy";
+const clientId = process.env.REACT_APP_API_KEY;
+const clientSecret = process.env.REACT_APP_API_SECRET;
 
 let newApiToken = "";
+
+
+// if yoy want to use the new token, you can use this function
 
 const getNewAccessToken = async () => {
   try {
