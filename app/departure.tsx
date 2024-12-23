@@ -2,11 +2,55 @@ import { View, Text, Pressable, TextInput, FlatList } from "react-native";
 import React, { useState } from "react";
 import { router } from "expo-router";
 import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
+import { apiToken } from "@/utils/api";
+import axios from "axios";
+import { FlightOfferData } from "@/types";
 
 export default function DepartureScreen() {
   const [searchInput, setSearchInput] = useState<string>("");
   const [autoCompleteResult, setAutoCompleteResult] = useState<any[]>([]);
-  const handleInputChange = (text: string) => setSearchInput(text);
+  const [flighOfferData, setFlightOfferData] = useState<FlightOfferData>({
+    originLocationCode: "",
+    destinationLocationCode: "",
+    departureDate: new Date(),
+    returnDate: new Date(),
+    adults: 0,
+    children: 0,
+    maxResults: 10,
+  });
+
+  const autoCompleteSearch = async (searchInput: string) => {
+    try {
+      const headers = {
+        Authorization: `Bearer ${apiToken}`,
+      };
+      const url = `https://test.api.amadeus.com/v1/reference-data/locations?subType=AIRPORT,CITY&keyword=${searchInput}`;
+
+      const res = await axios.get(url, { headers });
+      setAutoCompleteResult(res.data.data);
+    } catch (error) {
+      if (
+        axios.isAxiosError(error) &&
+        error.response &&
+        error.response.status === 429
+      ) {
+        console.error("Rate limit exceeded, try again later");
+      }
+      console.log(error);
+    }
+  };
+  const debounce = (func: any, delay: number) => {
+    let timeOutId: any;
+    return (...args: any) => {
+      clearTimeout(timeOutId);
+      timeOutId = setTimeout(() => func.apply(null, args), delay);
+    };
+  };
+  const debouncedAutoCompleteSearch = debounce(autoCompleteSearch, 5000);
+  const handleInputChange = (text: string) => {
+    setSearchInput(text);
+    debouncedAutoCompleteSearch(text);
+  };
   return (
     <View className="flex-1 items-center bg-[#f57fa] ">
       <View className="w-full h-full">
