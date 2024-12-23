@@ -1,6 +1,4 @@
-import LocationInput from "@/components/Form/LocationInput";
-import TripOption from "@/components/Form/TripOption";
-import Header from "@/components/Header";
+import {LocationInput,TripOption,Header} from "@/components";
 
 import { SearchFlightData } from "@/types";
 
@@ -91,6 +89,7 @@ export default function HomeScreen() {
               <FontAwesome5 size={20} color={"gray"} name="plane-departure" />
             }
             onPress={() => {}}
+            date
           />
         </View>
       </View>
