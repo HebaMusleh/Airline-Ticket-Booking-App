@@ -3,10 +3,11 @@ import { LocationInput, TripOption, Header } from "@/components";
 import { FlightOfferData, SearchFlightData } from "@/types";
 
 import { FontAwesome5, MaterialCommunityIcons } from "@expo/vector-icons";
-import { router } from "expo-router";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { router, useFocusEffect } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import {
   View,
   ActivityIndicator,
@@ -17,7 +18,9 @@ import {
 
 export default function HomeScreen() {
   const [isPending, setIsPending] = useState<boolean>(false);
+  const [refreshData, setRefreshData] = useState<boolean>(true);
   const [pageNavigation, setPageNavigation] = useState<string>("oneWay");
+  const [session, setSession] = useState<string>("");
   const [searchFlightData, setSearchFlightData] = useState<SearchFlightData>({
     originCity: "",
     destinationCity: "",
@@ -48,6 +51,51 @@ export default function HomeScreen() {
       adults: valueSeatValue,
     }));
   };
+
+  const handleFromPreviousScreen = () => {
+    setRefreshData(true);
+  };
+
+  useFocusEffect(
+    useCallback(() => {
+      handleFromPreviousScreen();
+    }, [session])
+  );
+
+  // Fix Depature date issue
+  useEffect(() => {
+    const loadSelectedDestination = async () => {
+      try {
+        const departureCities = await AsyncStorage.getItem("departureCities");
+        const destinationCities = await AsyncStorage.getItem(
+          "destinationCities"
+        );
+        const departureDate = await AsyncStorage.getItem("departureDate");
+        if (departureCities !== null) {
+          const departureCityArray = JSON.parse(departureCities);
+          const lastArray = departureCityArray[departureCityArray.length - 1];
+          setSearchFlightData((prev) => ({
+            ...prev,
+            originCity: lastArray.city,
+          }));
+          setFlightOffers((prev) => ({
+            ...prev,
+            originLocationCode: lastArray.iataCode,
+          }));
+        }
+        if (departureDate !== null) {
+          setSelectedDate(departureDate);
+          setSearchFlightData((prev) => ({
+            ...prev,
+            departureDate,
+          }));
+        }
+      } catch (error) {}
+    };
+
+    loadSelectedDestination();
+    setRefreshData(false);
+  }, [refreshData]);
 
   return (
     <View className="flex-1 items-center bg-[#F5F7FA] relative">

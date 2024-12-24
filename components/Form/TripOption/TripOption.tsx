@@ -10,7 +10,6 @@ const TripOption: React.FC<TripOptionProps> = ({
   handleNavigationChange,
 }) => (
   <View className="flex-row justify-between w-full px-4 py-2">
-    <Text>Trip Option</Text>
     <Pressable
       className="flex-row w-1/2 "
       onPress={() => handleNavigationChange("oneWay")}
