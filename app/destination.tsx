@@ -9,6 +9,7 @@ import { View, Text, Pressable, TextInput, FlatList } from "react-native";
 
 import { apiToken } from "@/utils/api";
 import { FlightOfferData } from "@/types";
+import { Header2 } from "@/components";
 
 export default function DestinationScreen() {
   const [searchInput, setSearchInput] = useState<string>("");
@@ -84,45 +85,7 @@ export default function DestinationScreen() {
   return (
     <View className="flex-1 items-center bg-[#f57fa] ">
       <View className="w-full h-full">
-        <View
-          className="mb-4 justify-start border-orange-600 w-full bg-[#192031] relative pt-16 pb-8"
-          style={{
-            borderBottomLeftRadius: 30,
-            borderBottomRightRadius: 30,
-          }}
-        >
-          <View>
-            {/* header  */}
-            <View className="flex-row gap-4 justify-start items-center h-14 ">
-              <Pressable
-                className="flex-row items-center justify-center h-14 w-[20%]"
-                onPress={() => router.back()}
-              >
-                <View className="rounded-full bg-gray-500 h-8 w-8 justify-center items-center">
-                  <MaterialIcons
-                    name="keyboard-arrow-left"
-                    size={30}
-                    color="white"
-                  />
-                </View>
-              </Pressable>
-              <View className="w-[60%] justify-center items-center">
-                <Text className="text-lg text-white font-extrabold">
-                  Select Destination City :
-                </Text>
-              </View>
-              <View>
-                <View>
-                  <MaterialCommunityIcons
-                    name="dots-horizontal"
-                    size={30}
-                    color="white"
-                  />
-                </View>
-              </View>
-            </View>
-          </View>
-        </View>
+       <Header2 text="Select Destination City " />
         {/* Airport or City Search  */}
         <View className="w-full py-4 px-4 relative">
           <View className="flex-row justify-between items-center bg-white border-2 border-gray-400 rounded-xl h-14 overflow-hidden outline-none">

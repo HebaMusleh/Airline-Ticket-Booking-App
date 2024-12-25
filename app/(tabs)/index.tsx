@@ -166,7 +166,7 @@ export default function HomeScreen() {
             }
             value={searchFlightData.departureDate.replace(/^"|"$/g, "/")}
             icon={<FontAwesome5 size={20} color={"gray"} name="calendar-alt" />}
-            onPress={() => {}}
+            onPress={() => router.push("/departureDate")}
             date
           />
 
