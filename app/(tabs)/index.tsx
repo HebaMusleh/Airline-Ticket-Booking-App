@@ -155,7 +155,7 @@ export default function HomeScreen() {
             icon={
               <FontAwesome5 size={20} color={"gray"} name="plane-arrival" />
             }
-            onPress={() => {}}
+            onPress={() => router.push("/destination")}
           />
           {/* Date  */}
           <LocationInput
