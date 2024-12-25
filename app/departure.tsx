@@ -6,7 +6,7 @@ import { View, Text, Pressable, TextInput, FlatList } from "react-native";
 
 import { apiToken } from "@/utils/api";
 import { FlightOfferData } from "@/types";
-import { Header2 } from "@/components";
+import { Container, Header2 } from "@/components";
 
 export default function DepartureScreen() {
   const [searchInput, setSearchInput] = useState<string>("");
@@ -81,8 +81,7 @@ export default function DepartureScreen() {
     loadPreviousSelectedCities();
   }, []);
   return (
-    <View className="flex-1 items-center bg-[#f57fa] ">
-      <View className="w-full h-full">
+    <Container>
         <Header2 text="Select Departure" />
         {/* Airport or City Search  */}
         <View className="w-full py-4 px-4 relative">
@@ -141,9 +140,7 @@ export default function DepartureScreen() {
               </Pressable>
             ))}
           </View>
-        </View>
-      </View>
-      <Text>DepartureScreen</Text>
-    </View>
+          </View>
+    </Container>
   );
 }

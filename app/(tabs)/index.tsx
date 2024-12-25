@@ -1,9 +1,11 @@
 import { LocationInput, TripOption, Header } from "@/components";
 
 import { FlightOfferData, SearchFlightData } from "@/types";
+import { apiBaseUrl, apiToken } from "@/utils/api";
 
 import { FontAwesome5, MaterialCommunityIcons } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import axios from "axios";
 import { router, useFocusEffect } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 
@@ -14,6 +16,7 @@ import {
   TextInput,
   Pressable,
   Text,
+  Alert,
 } from "react-native";
 
 export default function HomeScreen() {
@@ -61,6 +64,56 @@ export default function HomeScreen() {
       handleFromPreviousScreen();
     }, [session])
   );
+
+  const constructSearch = () => {
+    const {
+      originLocationCode,
+      destinationLocationCode,
+      departureDate,
+      adults,
+      maxResults,
+    } = flightOffers;
+    const formattedDepartureDate = String(departureDate).replace(/^"|"$/g, "");
+    if (
+      !originLocationCode ||
+      !destinationLocationCode ||
+      !departureDate ||
+      !adults
+    ) {
+      Alert.alert("Please fill all the fields");
+    }
+    return `${apiBaseUrl}?originLocationCode=${originLocationCode}&destinationLocationCode=${destinationLocationCode}&departureDate=${formattedDepartureDate}&adults=${adults}&maxResults=${maxResults}`;
+  };
+
+  const handleParentSearch = async () => {
+    const searchUrl = constructSearch();
+    setIsPending(true);
+
+    if (searchUrl) {
+      try {
+        const response = await axios.get(searchUrl, {
+          headers: {
+            Authorization: `Bearer ${apiToken}`,
+          },
+        });
+        if (response.data) {
+          setIsPending(false);
+          await AsyncStorage.setItem(
+            "searchFlightData",
+            JSON.stringify(response.data)
+          );
+          router.push({"/searchResult",
+            params:{
+              flightOffers :JSON.stringify(flightOffers),
+            }}
+          );
+        }
+      } catch (error) {
+        console.error("Error fetching data", error);
+        setIsPending(false);
+      }
+    }
+  };
 
   // Fix Depature date issue
   useEffect(() => {

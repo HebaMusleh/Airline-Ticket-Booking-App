@@ -1,15 +1,13 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
-import { router } from "expo-router";
-import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import { View, Text, Pressable, TextInput, FlatList } from "react-native";
 
 import { apiToken } from "@/utils/api";
 import { FlightOfferData } from "@/types";
-import { Header2 } from "@/components";
+import { Container, Header2 } from "@/components";
 
 export default function DestinationScreen() {
   const [searchInput, setSearchInput] = useState<string>("");
@@ -83,68 +81,66 @@ export default function DestinationScreen() {
     loadPreviousSelectedCities();
   }, []);
   return (
-    <View className="flex-1 items-center bg-[#f57fa] ">
-      <View className="w-full h-full">
-       <Header2 text="Select Destination City " />
-        {/* Airport or City Search  */}
-        <View className="w-full py-4 px-4 relative">
-          <View className="flex-row justify-between items-center bg-white border-2 border-gray-400 rounded-xl h-14 overflow-hidden outline-none">
-            <View className="w-full h-full justify-center">
-              <TextInput
-                placeholder="Search for Airport or City"
-                placeholderTextColor={"gray"}
-                value={searchInput}
-                onChangeText={handleInputChange}
-                className="bg-transparent text-gray-600 h-full px-2 capitalize"
-              />
-            </View>
-          </View>
-
-          {/* Search -autocomplete - Result  */}
-          {autoCompleteResult.length > 0 && (
-            <View className="border-2 border-gray-400 bg-white rounded-xl shadow-sm mt-4">
-              <FlatList
-                data={autoCompleteResult}
-                keyExtractor={(item) => item.id}
-                renderItem={({ item }) => (
-                  <Pressable
-                    onPress={() => handleSelectedAutoComplete(item)}
-                    className="px-2 rounded-xl py-2 my-1"
-                  >
-                    <Text className="text-gray-500 capitalize">
-                      {item.name} {item.iataCode}
-                    </Text>
-                  </Pressable>
-                )}
-              />
-            </View>
-          )}
-
-          {/* Previous Selected Cities  */}
-          <View className="px-4 w-full">
-            <Text className="text-lg text-gray-500 font-bold">
-              Previous Selected :
-            </Text>
-            {previousSelectedDestination.map((city, index) => (
-              <Pressable
-                key={index}
-                onPress={() => {
-                  setFlightOfferData({
-                    ...flighOfferData,
-                    destinationLocationCode: city.iataCode,
-                  });
-                  setSearchInput(`${city.city} ${city.iataCode}`);
-                }}
-                className="bg-white border-2 border-gray-400 rounded-xl px-2 py-3 my-2"
-              >
-                <Text className="text-gray-500 capitalize">
-                  {city.city} {city.iataCode}
-                </Text>
-              </Pressable>
-            ))}
+    <Container>
+      <Header2 text="Select Destination City " />
+      {/* Airport or City Search  */}
+      <View className="w-full py-4 px-4 relative">
+        <View className="flex-row justify-between items-center bg-white border-2 border-gray-400 rounded-xl h-14 overflow-hidden outline-none">
+          <View className="w-full h-full justify-center">
+            <TextInput
+              placeholder="Search for Airport or City"
+              placeholderTextColor={"gray"}
+              value={searchInput}
+              onChangeText={handleInputChange}
+              className="bg-transparent text-gray-600 h-full px-2 capitalize"
+            />
           </View>
         </View>
+
+        {/* Search -autocomplete - Result  */}
+        {autoCompleteResult.length > 0 && (
+          <View className="border-2 border-gray-400 bg-white rounded-xl shadow-sm mt-4">
+            <FlatList
+              data={autoCompleteResult}
+              keyExtractor={(item) => item.id}
+              renderItem={({ item }) => (
+                <Pressable
+                  onPress={() => handleSelectedAutoComplete(item)}
+                  className="px-2 rounded-xl py-2 my-1"
+                >
+                  <Text className="text-gray-500 capitalize">
+                    {item.name} {item.iataCode}
+                  </Text>
+                </Pressable>
+              )}
+            />
+          </View>
+        )}
+
+        {/* Previous Selected Cities  */}
+        <View className="px-4 w-full">
+          <Text className="text-lg text-gray-500 font-bold">
+            Previous Selected :
+          </Text>
+          {previousSelectedDestination.map((city, index) => (
+            <Pressable
+              key={index}
+              onPress={() => {
+                setFlightOfferData({
+                  ...flighOfferData,
+                  destinationLocationCode: city.iataCode,
+                });
+                setSearchInput(`${city.city} ${city.iataCode}`);
+              }}
+              className="bg-white border-2 border-gray-400 rounded-xl px-2 py-3 my-2"
+            >
+              <Text className="text-gray-500 capitalize">
+                {city.city} {city.iataCode}
+              </Text>
+            </Pressable>
+          ))}
+        </View>
       </View>
-    </View>
+    </Container>
   );
 }
