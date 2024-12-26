@@ -41,6 +41,7 @@ export default function RootLayout() {
         <Stack.Screen name="departure" />
         <Stack.Screen name="departureDate" />
         <Stack.Screen name="destination" />
+        <Stack.Screen name="searchResult" />
       </Stack>
       <StatusBar style="auto" />
     </ThemeProvider>

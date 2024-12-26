@@ -28,7 +28,7 @@ export default function HomeScreen() {
     originCity: "",
     destinationCity: "",
     departureDate: "",
-    seat: 0,
+    seat: 1,
   });
   const [selctedDate, setSelectedDate] = useState<any>(new Date());
   const [flightOffers, setFlightOffers] = useState<FlightOfferData>({
@@ -36,7 +36,7 @@ export default function HomeScreen() {
     destinationLocationCode: "",
     departureDate: new Date(),
     returnDate: new Date(),
-    adults: 0,
+    adults: 1,
     children: 0,
     maxResults: 10,
   });
@@ -73,7 +73,7 @@ export default function HomeScreen() {
       adults,
       maxResults,
     } = flightOffers;
-    const formattedDepartureDate = String(departureDate).replace(/^"|"$/g, "");
+    const formattedDepartureDate = departureDate.replace(/"/g, "");
     if (
       !originLocationCode ||
       !destinationLocationCode ||
@@ -88,29 +88,42 @@ export default function HomeScreen() {
   const handleParentSearch = async () => {
     const searchUrl = constructSearch();
     setIsPending(true);
+    console.log(searchUrl)
 
-    if (searchUrl) {
-      try {
-        const response = await axios.get(searchUrl, {
-          headers: {
-            Authorization: `Bearer ${apiToken}`,
+    try {
+      const response = await axios.get(searchUrl, {
+        headers: {
+          Authorization: `Bearer ${apiToken}`,
+        },
+      });
+      setIsPending(false);
+
+      if (response.data) {
+        setIsPending(false);
+        await AsyncStorage.setItem(
+          "searchFlightData",
+          JSON.stringify(searchFlightData)
+        );
+        console.log("test", response.data);
+        router.push({
+          pathname: "/searchResult",
+          params: {
+            flightOffers: JSON.stringify(response.data),
           },
         });
-        if (response.data) {
-          setIsPending(false);
-          await AsyncStorage.setItem(
-            "searchFlightData",
-            JSON.stringify(response.data)
-          );
-          router.push({"/searchResult",
-            params:{
-              flightOffers :JSON.stringify(flightOffers),
-            }}
-          );
-        }
-      } catch (error) {
-        console.error("Error fetching data", error);
-        setIsPending(false);
+      }
+    } catch (error) {
+      console.error("Error fetching data", error);
+      if (error.response && error.response.status === 401) {
+        Alert.alert("Session Expired", "Please Refresh your access token", [
+          { text: "OK" },
+        ]);
+      } else {
+        Alert.alert(
+          "Error",
+          "An Error occurred while fetching flight offers ",
+          [{ text: "OK" }]
+        );
       }
     }
   };
@@ -139,6 +152,11 @@ export default function HomeScreen() {
         if (departureDate !== null) {
           setSelectedDate(departureDate);
           setSearchFlightData((prev) => ({
+            ...prev,
+            departureDate,
+          }));
+
+          setFlightOffers((prev) => ({
             ...prev,
             departureDate,
           }));
@@ -244,7 +262,7 @@ export default function HomeScreen() {
           <View className="w-full justify-start pt-2 px-4 mt-4">
             <Pressable
               className="bg-[#12b3A8] rounded-l justify-center items-center py-4"
-              onPress={() => {}}
+              onPress={handleParentSearch}
             >
               <Text className="text-white font-bold text-lg">Search</Text>
             </Pressable>
