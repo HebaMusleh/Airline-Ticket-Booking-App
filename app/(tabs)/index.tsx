@@ -82,7 +82,7 @@ export default function HomeScreen() {
     ) {
       Alert.alert("Please fill all the fields");
     }
-    return `${apiBaseUrl}?originLocationCode=${originLocationCode}&destinationLocationCode=${destinationLocationCode}&departureDate=${formattedDepartureDate}&adults=${adults}&maxResults=${maxResults}`;
+    return `${apiBaseUrl}?originLocationCode=${originLocationCode}&destinationLocationCode=${destinationLocationCode}&departureDate=${formattedDepartureDate}&adults=${adults}&max=${maxResults}`;
   };
 
   const handleParentSearch = async () => {
