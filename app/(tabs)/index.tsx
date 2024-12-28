@@ -73,7 +73,10 @@ export default function HomeScreen() {
       adults,
       maxResults,
     } = flightOffers;
-    const formattedDepartureDate = departureDate.replace(/"/g, "");
+
+    const formattedDepartureDate = departureDate
+      .toISOString()
+      .replace(/"/g, "");
     if (
       !originLocationCode ||
       !destinationLocationCode ||
@@ -82,18 +85,19 @@ export default function HomeScreen() {
     ) {
       Alert.alert("Please fill all the fields");
     }
-    return `${apiBaseUrl}?originLocationCode=${originLocationCode}&destinationLocationCode=${destinationLocationCode}&departureDate=${formattedDepartureDate}&adults=${adults}&max=${maxResults}`;
-  };
+    // return `${apiBaseUrl}?originLocationCode=${originLocationCode}&destinationLocationCode=${destinationLocationCode}&departureDate=${formattedDepartureDate}&adults=${adults}&max=${maxResults}`;
 
+    return "https://test.api.amadeus.com/v2/shopping/flight-offers?originLocationCode=LHR&destinationLocationCode=LGW&departureDate=2024-12-17&adults=2&max=10"
+  };
   const handleParentSearch = async () => {
     const searchUrl = constructSearch();
+    console.log(searchUrl);
     setIsPending(true);
-    console.log(searchUrl)
-
     try {
       const response = await axios.get(searchUrl, {
         headers: {
           Authorization: `Bearer ${apiToken}`,
+          Accept: "application/json, text/plain, */*",
         },
       });
       setIsPending(false);
@@ -113,8 +117,14 @@ export default function HomeScreen() {
         });
       }
     } catch (error) {
+      console.log("error");
+      setIsPending(false);
       console.error("Error fetching data", error);
-      if (error.response && error.response.status === 401) {
+      if (
+        axios.isAxiosError(error) &&
+        error.response &&
+        error.response.status === 401
+      ) {
         Alert.alert("Session Expired", "Please Refresh your access token", [
           { text: "OK" },
         ]);
@@ -125,6 +135,8 @@ export default function HomeScreen() {
           [{ text: "OK" }]
         );
       }
+    } finally {
+      setIsPending(false);
     }
   };
 
@@ -134,7 +146,7 @@ export default function HomeScreen() {
       try {
         const departureCities = await AsyncStorage.getItem("departureCities");
         const destinationCities = await AsyncStorage.getItem(
-          "destinationCities"
+          "destinationCity"
         );
         const departureDate = await AsyncStorage.getItem("departureDate");
         if (departureCities !== null) {
@@ -149,6 +161,19 @@ export default function HomeScreen() {
             originLocationCode: lastArray.iataCode,
           }));
         }
+        if (destinationCities !== null) {
+          const destinationCityArray = JSON.parse(destinationCities);
+          const lastArray =
+            destinationCityArray[destinationCityArray.length - 1];
+          setSearchFlightData((prev) => ({
+            ...prev,
+            destinationCity: lastArray.city,
+          }));
+          setFlightOffers((prev) => ({
+            ...prev,
+            destinationLocationCode: lastArray.iataCode,
+          }));
+        }
         if (departureDate !== null) {
           setSelectedDate(departureDate);
           setSearchFlightData((prev) => ({
@@ -158,15 +183,18 @@ export default function HomeScreen() {
 
           setFlightOffers((prev) => ({
             ...prev,
-            departureDate,
+            departureDate: new Date(departureDate),
           }));
         }
-      } catch (error) {}
+      } catch (error) {
+        console.error(error);
+      }
     };
 
     loadSelectedDestination();
     setRefreshData(false);
   }, [refreshData]);
+
 
   return (
     <View className="flex-1 items-center bg-[#F5F7FA] relative">
@@ -262,6 +290,7 @@ export default function HomeScreen() {
           <View className="w-full justify-start pt-2 px-4 mt-4">
             <Pressable
               className="bg-[#12b3A8] rounded-l justify-center items-center py-4"
+              // onPress={handleParentSearch}
               onPress={handleParentSearch}
             >
               <Text className="text-white font-bold text-lg">Search</Text>
