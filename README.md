@@ -36,12 +36,18 @@ To set up the project locally, follow these steps:
 
 
 ## APP Screen : 
-![Welcome Screen](https://github.com/user-attachments/assets/f112cadc-bb1c-4058-843b-24f6138080a4)
-![Home Screen](https://github.com/user-attachments/assets/f9dd5017-4b0a-4ffd-82ef-f6fb6cdc4eb1)
-![Depature Date Screen](https://github.com/user-attachments/assets/6b3b2b7c-720d-46db-a5f7-d59eca219939)
-![Save Date](https://github.com/user-attachments/assets/72974391-86b5-47f3-bb14-58f41440be27)
-![Select Depature Screen](https://github.com/user-attachments/assets/a101bfa0-bec9-444f-a970-53f66ed24e0f)
-![Destination Screen](https://github.com/user-attachments/assets/3a02e394-d17c-47bc-a1af-7b03a9ca2e57)
+<img src="https://github.com/user-attachments/assets/f112cadc-bb1c-4058-843b-24f6138080a4" alt="Welcome Screen" width="300">
+
+<img src="https://github.com/user-attachments/assets/f9dd5017-4b0a-4ffd-82ef-f6fb6cdc4eb1" alt="Home Screen" width="300">
+
+<img src="https://github.com/user-attachments/assets/6b3b2b7c-720d-46db-a5f7-d59eca219939" alt="Depature Date Screen" width="300">
+
+<img src="https://github.com/user-attachments/assets/72974391-86b5-47f3-bb14-58f41440be27" alt="Save Date" width="300">
+
+<img src="https://github.com/user-attachments/assets/a101bfa0-bec9-444f-a970-53f66ed24e0f" alt="Select Depature Screen" width="300">
+
+<img src="https://github.com/user-attachments/assets/3a02e394-d17c-47bc-a1af-7b03a9ca2e57" alt="Destination Screen" width="300">
+
 
 
 ## Note :
